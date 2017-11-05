@@ -91,6 +91,12 @@ h1 .logo-garden{
   color: #444;
   font-weight: bold;
 }
+      .social-links{ margin: 0; padding: 0; margin-top: 50px;}
+      .social-links a{
+        display: block;
+        font-size: 1.2em;
+        text-align: center;
+      }
   </style>
   <link href="https://fonts.googleapis.com/css?family=Roboto+Mono" rel="stylesheet">
   <script src="https://www.google.com/recaptcha/api.js" async defer></script>
@@ -107,11 +113,16 @@ h1 .logo-garden{
         </h1>
       </div>
 
-      <form class="pure-form pure-form-aligned" id="schedule" accept-charset="utf-8">
+      <form action="https://liveformhq.com/form/e7ef814b-070c-4b51-a4bb-e417d938cef2" method="POST" class="pure-form pure-form-aligned" id="schedule" accept-charset="utf-8">
+        <input type="hidden" value="http://staticgarden.com/thank-you.html" name="_redirect" />
         <fieldset>
           <div class="pure-control-group">
             <label for="email">Email</label>
-            <input id="email" type="email" placeholder="Your email ..." required>
+            <input name="email" type="email" placeholder="Your email ..." required>
+          </div>
+
+          <div class="pure-controls">
+            <div class="g-recaptcha" data-sitekey="6LfTTDcUAAAAAHVf2UaVFD5h_NxfjIzg2Z3UWKN2"></div>
           </div>
 
           <div class="pure-controls">
@@ -120,6 +131,11 @@ h1 .logo-garden{
 
         </fieldset>
       </form>
+
+      <p class='social-links'>
+      <a href="https://twitter.com/staticgarden">Follow us on Twitter @staticgarden</a>
+      <a href="https://www.producthunt.com/upcoming/static-garden">Follow us on Product Hunt </a>
+      </p>
     </div>
 
     <div class="footer">
@@ -127,71 +143,6 @@ h1 .logo-garden{
     </div>
   </div>
 
-  <script charset="utf-8" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-  <script charset="utf-8">
-$(function() {
-  'use strict'
-
-  const URL = "https://xro5cjzrnk.execute-api.us-east-1.amazonaws.com/prod/request"
-
-  const schedule = $("#schedule"),
-    scheduleForm = schedule[0];
-
-  const isEmpty = (x) => (x || "").toString().trim().length == 0
-  const attrs = ["url", "method", "email", "recaptchaResponse"]
-  const getRequest = () => {
-
-    const req = {
-      url: scheduleForm.url.value,
-      method: scheduleForm.method.value,
-      email: scheduleForm.email.value,
-      recaptchaResponse: scheduleForm['g-recaptcha-response'].value
-    };
-
-    const errors =
-      attrs
-      .map(attr => isEmpty(req[attr]) ? `${attr} cannot be empty` : null)
-      .filter(x => x)
-
-    if (errors.length != 0) {
-      return {
-        errors: errors
-      }
-    }
-
-    return req
-  }
-
-  schedule.on("submit", (e) => {
-    e.preventDefault()
-
-    const req = getRequest()
-
-    if (req.errors) {
-      alert(`Please correct the following errors: \n${req.errors.join("\n")}`)
-      return false
-    }
-
-    $.ajax({
-      url: URL,
-      method: 'POST',
-      contentType: 'application/json', // request
-      dataType: 'json', // response
-      data: JSON.stringify(req),
-      success: function(data, textStatus, jqXHR) {
-        alert("Successfully scheduled your url to be requested daily")
-      },
-      error: function(jqXHR, textStatus, errorThrown) {
-        alert("An error occured, please try again")
-      }
-    })
-
-    return false;
-  })
-
-})
-
-  </script>
 </body>
 
 </html>
